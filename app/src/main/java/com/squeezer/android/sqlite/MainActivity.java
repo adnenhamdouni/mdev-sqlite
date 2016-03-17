@@ -14,6 +14,7 @@ import android.widget.ListView;
 import com.squeezer.android.sqlite.adapter.CustomAdapter;
 import com.squeezer.android.sqlite.database.MySQLiteDataBaseHelper;
 import com.squeezer.android.sqlite.database.SqliteDataBaseHelper;
+import com.squeezer.android.sqlite.fragment.ItemsFragment;
 import com.squeezer.android.sqlite.wrapper.ItemWrapper;
 
 import java.util.ArrayList;
@@ -37,6 +38,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (savedInstanceState == null) {
+            ItemsFragment fragment = new ItemsFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.content, fragment)
+                    .commit();
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
