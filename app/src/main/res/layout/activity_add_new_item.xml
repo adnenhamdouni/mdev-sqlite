@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/bg_item"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp" >
+
+        <EditText
+            android:id="@+id/edittext_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_layout_marginBottom"
+            android:background="@color/input_item_bg"
+            android:hint="@string/hint_title"
+            android:padding="@dimen/activity_padding"
+            android:singleLine="true"
+            android:inputType="textCapWords"
+            android:textColor="@color/input_item"
+            android:textColorHint="@color/input_item_hint" />
+
+        <EditText
+            android:id="@+id/edittext_info"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_layout_marginBottom"
+            android:background="@color/input_item_bg"
+            android:hint="@string/hint_info"
+            android:inputType="text"
+            android:padding="@dimen/activity_padding"
+            android:singleLine="true"
+            android:textColor="@color/input_item"
+            android:textColorHint="@color/input_item_hint" />
+
+
+        <!-- Login Button -->
+
+        <Button
+            android:id="@+id/btn_create_item"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_layout_marginTop"
+            android:background="@color/btn_background"
+            android:text="@string/btn_insert_item"
+            android:textColor="@color/white" />
+
+
+    </LinearLayout>
+
+</LinearLayout>
