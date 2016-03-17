@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import com.facebook.stetho.Stetho;
 import com.squeezer.android.sqlite.adapter.CustomAdapter;
 import com.squeezer.android.sqlite.database.MySQLiteDataBaseHelper;
 import com.squeezer.android.sqlite.database.SqliteDataBaseHelper;
@@ -49,6 +50,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        initStetho();
+        initDatabase();
+
+    }
+
+    private void initStetho() {
+        Stetho.initialize(Stetho.newInitializerBuilder(this)
+                .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
+                .build());
+    }
+
+    private void initDatabase() {
         mSqliteDataBaseHelper = SqliteDataBaseHelper
                 .getInstance(getApplicationContext());
 
@@ -63,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         //initListValues(10);
-
     }
 
     @Override
