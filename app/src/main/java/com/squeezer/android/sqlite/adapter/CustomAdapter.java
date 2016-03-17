@@ -1,6 +1,7 @@
 package com.squeezer.android.sqlite.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,69 +17,49 @@ import java.util.List;
 /**
  * Created by adnen on 3/17/16.
  */
-public class CustomAdapter extends BaseAdapter {
+public class CustomAdapter extends
+        RecyclerView.Adapter<CustomAdapter.ViewHolder> {
 
     private LayoutInflater mInflater;
     private List<ItemWrapper> mObjectsList = new ArrayList<ItemWrapper>();
 
-    public CustomAdapter(Context context, List<ItemWrapper> objectItemsList) {
 
-        mInflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mObjectsList = objectItemsList;
+    public CustomAdapter(List<ItemWrapper> itemsList) {
+
+        mObjectsList = itemsList;
     }
 
     @Override
-    public int getCount() {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(
+                R.layout.list_item_layout, parent, false);
 
+        ViewHolder viewholder = new ViewHolder(view);
+        return viewholder;
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.mItemTitle.setText(mObjectsList.get(position).getTitle());
+        holder.mItemInfo.setText(mObjectsList.get(position).getInfo());
+    }
+
+    @Override
+    public int getItemCount() {
         return mObjectsList.size();
     }
 
-    @Override
-    public Object getItem(int position) {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        return mObjectsList.get(position);
-    }
+        public TextView mItemTitle;
+        public TextView mItemInfo;
 
-    @Override
-    public long getItemId(int position) {
+        public ViewHolder(View view) {
+            super(view);
+            mItemTitle = (TextView) view.findViewById(R.id.title_layout);
+            mItemInfo = (TextView) view.findViewById(R.id.info_layout);
 
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ItemViewHolder itemViewHolder;
-
-        if (convertView == null) {
-
-            convertView = mInflater.inflate(R.layout.list_item_layout, parent,
-                    false);
-
-            itemViewHolder = new ItemViewHolder();
-            itemViewHolder.mItemTitle = (TextView) convertView
-                    .findViewById(R.id.title_layout);
-            itemViewHolder.mItemInfo = (TextView) convertView
-                    .findViewById(R.id.info_layout);
-
-            convertView.setTag(itemViewHolder);
-        } else {
-            itemViewHolder = (ItemViewHolder) convertView.getTag();
         }
-
-        itemViewHolder.mItemTitle
-                .setText(mObjectsList.get(position).getTitle());
-        itemViewHolder.mItemInfo.setText(mObjectsList.get(position).getInfo());
-
-
-        return convertView;
-    }
-
-    private static class ItemViewHolder {
-
-        TextView mItemTitle;
-        TextView mItemInfo;
-
     }
 
 }

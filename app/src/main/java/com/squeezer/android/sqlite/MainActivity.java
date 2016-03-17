@@ -25,13 +25,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String LOG_TAG = "ADNEN";
 
 
-    private ListView mListView;
-    private List<ItemWrapper> objectItemsList;
-    private CustomAdapter mCustomAdapter;
-
-    SqliteDataBaseHelper mSqliteDataBaseHelper;
-    MySQLiteDataBaseHelper dbl;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,54 +50,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mSqliteDataBaseHelper = SqliteDataBaseHelper
-                .getInstance(getApplicationContext());
 
-        dbl = new MySQLiteDataBaseHelper(this);
 
-        //dbl.addItemWrapper(new ItemWrapper(2, "cc", "hey"));
-        dbl.getItemWrapper(1);
 
-        initView();
-
-        objectItemsList = dbl.getAllItemWrapper();
 
 
         //initListValues(10);
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        objectItemsList = dbl.getAllItemWrapper();
-        ShowList();
-    }
-
-    private void initView() {
-
-        mListView = (ListView) findViewById(R.id.list_view);
-
-    }
-
-    private void initListValues(int numberOfObject) {
-
-        objectItemsList = new ArrayList<ItemWrapper>();
-        for (int i = 0; i < numberOfObject; i++) {
-            ItemWrapper wrapper = new ItemWrapper(1, "item n° " + i, "item n° "
-                    + i + " description");
-            objectItemsList.add(wrapper);
-
-        }
-
-    }
-
-    private void ShowList() {
-
-        mCustomAdapter = new CustomAdapter(getApplicationContext(),
-                objectItemsList);
-
-        mListView.setAdapter(mCustomAdapter);
 
     }
 
