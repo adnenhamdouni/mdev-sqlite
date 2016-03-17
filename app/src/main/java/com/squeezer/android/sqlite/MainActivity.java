@@ -10,12 +10,18 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.squeezer.android.sqlite.adapter.CustomAdapter;
 import com.squeezer.android.sqlite.database.MySQLiteDataBaseHelper;
 import com.squeezer.android.sqlite.database.SqliteDataBaseHelper;
+import com.squeezer.android.sqlite.eventbus.EventBusEvents;
+import com.squeezer.android.sqlite.fragment.AddItemFragment;
 import com.squeezer.android.sqlite.fragment.ItemsFragment;
 import com.squeezer.android.sqlite.wrapper.ItemWrapper;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,17 +51,44 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
-                Intent intent = new Intent(MainActivity.this, AddNewItemActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(MainActivity.this, AddNewItemActivity.class);
+//                startActivity(intent);
+
+                AddItemFragment fragment = AddItemFragment.getInstance();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content, fragment)
+                        .commit();
             }
         });
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Subscribe
+    public void onEvent(EventBusEvents.ItemEvent event) {
+
+        Toast.makeText(this, "message = "+event.getMessage(), Toast.LENGTH_LONG).show();
+
+        if(event.getMessage().equals("insert")){
 
 
-
-
-
-        //initListValues(10);
+            ItemsFragment fragment = ItemsFragment.getInstance(event.getMessage());
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content, fragment)
+                    .commit();
+        } else if (event.getMessage().equals("item clicked")) {
+        }
 
     }
 
