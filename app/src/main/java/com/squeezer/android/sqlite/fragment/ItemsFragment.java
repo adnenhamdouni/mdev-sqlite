@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import com.squeezer.android.sqlite.R;
 import com.squeezer.android.sqlite.adapter.CustomAdapter;
 import com.squeezer.android.sqlite.database.MySQLiteDataBaseHelper;
-import com.squeezer.android.sqlite.database.SqliteDataBaseHelper;
 import com.squeezer.android.sqlite.wrapper.ItemWrapper;
 
 import java.util.ArrayList;
@@ -28,14 +27,12 @@ public class ItemsFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter<CustomAdapter.ViewHolder> mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private List<ItemWrapper> mItemList;
-    private ItemWrapper mItemWrapper;
 
-    SqliteDataBaseHelper mSqliteDataBaseHelper;
-    MySQLiteDataBaseHelper dbl;
+    private static List<ItemWrapper> mItemList;
 
-    public static ItemsFragment newInstance() {
+    public static ItemsFragment newInstance(List<ItemWrapper> itemList) {
         ItemsFragment fragment = new ItemsFragment();
+        mItemList = itemList;
         return fragment;
     }
 
@@ -45,16 +42,8 @@ public class ItemsFragment extends Fragment {
 
         mContext = getActivity().getApplicationContext();
 
-        mSqliteDataBaseHelper = SqliteDataBaseHelper
-                .getInstance(mContext);
-
-        dbl = new MySQLiteDataBaseHelper(mContext);
-
-        //dbl.addItemWrapper(new ItemWrapper(2, "cc", "hey"));
-        dbl.getItemWrapper(1);
 
 
-        mItemList = dbl.getAllItemWrapper();
 
     }
 
@@ -82,8 +71,6 @@ public class ItemsFragment extends Fragment {
 
     private void initRecyclerView() {
 
-        mItemWrapper = new ItemWrapper();
-        mItemList = dbl.getAllItemWrapper();
 
         mRecyclerView.setHasFixedSize(true);
 
@@ -93,6 +80,8 @@ public class ItemsFragment extends Fragment {
         mAdapter = new CustomAdapter(mItemList);
         mRecyclerView.setAdapter(mAdapter);
     }
+
+
 
 
 }

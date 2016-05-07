@@ -1,19 +1,23 @@
 package com.squeezer.android.sqlite;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.squeezer.android.sqlite.adapter.CustomAdapter;
 import com.squeezer.android.sqlite.database.MySQLiteDataBaseHelper;
-import com.squeezer.android.sqlite.database.SqliteDataBaseHelper;
 import com.squeezer.android.sqlite.fragment.ItemsFragment;
 import com.squeezer.android.sqlite.wrapper.ItemWrapper;
 
@@ -22,8 +26,12 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String LOG_TAG = "ADNEN";
+    public static final String LOG_TAG = "MainActivity";
 
+    MySQLiteDataBaseHelper dbl;
+
+    private List<ItemWrapper> mItemList;
+    private ItemWrapper mItemWrapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         if (savedInstanceState == null) {
-            ItemsFragment fragment = new ItemsFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.content, fragment)
-                    .commit();
+
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -51,12 +56,62 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        dbl = new MySQLiteDataBaseHelper(this);
 
 
 
+        dbl.getItemWrapper(1);
 
-        //initListValues(10);
 
+        new ListItemAsyncTask().execute();
+        
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mItemList.clear();
+        new ListItemAsyncTask().execute();
+    }
+
+    private class ListItemAsyncTask extends
+            AsyncTask<Void, Integer, Void> {
+
+        public ListItemAsyncTask() {
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+
+
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            mItemList = dbl.getAllItemWrapper();
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            ItemsFragment fragment = ItemsFragment.newInstance(mItemList);
+            showFragment(fragment);
+
+        }
+
+    }
+
+    private void showFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.content, fragment)
+                .commit();
     }
 
     @Override
