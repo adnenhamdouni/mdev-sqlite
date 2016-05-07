@@ -1,10 +1,12 @@
 package com.squeezer.android.sqlite.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import com.squeezer.android.sqlite.R;
 import com.squeezer.android.sqlite.adapter.CustomAdapter;
 import com.squeezer.android.sqlite.database.MySQLiteDataBaseHelper;
+import com.squeezer.android.sqlite.listeners.RecyclerItemClickListener;
 import com.squeezer.android.sqlite.wrapper.ItemWrapper;
 
 import java.util.ArrayList;
@@ -22,6 +25,7 @@ import java.util.List;
  */
 public class ItemsFragment extends Fragment {
 
+    private static final String TAG = "ItemsFragment";
     private Context mContext;
 
     private RecyclerView mRecyclerView;
@@ -30,9 +34,12 @@ public class ItemsFragment extends Fragment {
 
     private static List<ItemWrapper> mItemList;
 
-    public static ItemsFragment newInstance(List<ItemWrapper> itemList) {
+    private static MyListener mListener;
+
+    public static ItemsFragment newInstance(MyListener listener, List<ItemWrapper> itemList) {
         ItemsFragment fragment = new ItemsFragment();
         mItemList = itemList;
+        mListener = listener;
         return fragment;
     }
 
@@ -58,6 +65,17 @@ public class ItemsFragment extends Fragment {
 
         initRecyclerView();
 
+        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext().getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        // do whatever
+                        Log.e(TAG, "onItemClick position ="+position);
+                        Log.e(TAG, "onItemClick title ="+mItemList.get(position).getTitle());
+                        mListener.onItemClickPerform(position, mItemList.get(position));
+
+                    }
+                })
+        );
+
 
         return view;
 
@@ -81,7 +99,10 @@ public class ItemsFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
     }
 
+    public interface MyListener {
+        public void onItemClickPerform(int position, ItemWrapper itemWrapper);
 
+    }
 
 
 }

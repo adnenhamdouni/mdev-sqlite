@@ -24,7 +24,7 @@ import com.squeezer.android.sqlite.wrapper.ItemWrapper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ItemsFragment.MyListener{
 
     public static final String LOG_TAG = "MainActivity";
 
@@ -40,9 +40,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if (savedInstanceState == null) {
-
-        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -62,9 +59,9 @@ public class MainActivity extends AppCompatActivity {
 
         dbl.getItemWrapper(1);
 
-
+        mItemList = new ArrayList<>();
         new ListItemAsyncTask().execute();
-        
+
     }
 
     @Override
@@ -73,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         mItemList.clear();
         new ListItemAsyncTask().execute();
     }
+
 
     private class ListItemAsyncTask extends
             AsyncTask<Void, Integer, Void> {
@@ -93,6 +91,10 @@ public class MainActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
 
             mItemList = dbl.getAllItemWrapper();
+            for (ItemWrapper item: mItemList) {
+
+                Log.e("adnen", "onItemClick title ="+item.getTitle());
+            }
 
             return null;
         }
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
 
-            ItemsFragment fragment = ItemsFragment.newInstance(mItemList);
+            ItemsFragment fragment = ItemsFragment.newInstance(MainActivity.this, mItemList);
             showFragment(fragment);
 
         }
@@ -109,8 +111,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showFragment(Fragment fragment) {
+
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.content, fragment)
+                .replace(R.id.content, fragment)
                 .commit();
     }
 
@@ -134,5 +137,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onItemClickPerform(int position, ItemWrapper item) {
+
+        Toast.makeText(MainActivity.this, "Position Clicked = "+ position + " & Item Title = "+item.getTitle(), Toast.LENGTH_SHORT).show();
     }
 }

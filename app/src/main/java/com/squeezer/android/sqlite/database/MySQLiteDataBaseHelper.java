@@ -101,6 +101,7 @@ public class MySQLiteDataBaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_ITEM_OBJECT_TITLE, item.getTitle());
+        values.put(KEY_ITEM_OBJECT_INFO, item.getInfo());
 
         db.insert(TABLE_ITEM_OBJECT, null, // nullColumnHack
                 values); // key/value -> keys = column names/ values = column
@@ -154,8 +155,8 @@ public class MySQLiteDataBaseHelper extends SQLiteOpenHelper {
         // 4. build book object
         ItemWrapper item = new ItemWrapper();
         item.setId(Integer.parseInt(cursor.getString(0)));
-        item.setTitle(cursor.getString(1));
-        item.setInfo(cursor.getString(2));
+        item.setTitle(cursor.getString(2));
+        item.setInfo(cursor.getString(3));
 
         // 5. return book
         return item;
@@ -194,8 +195,8 @@ public class MySQLiteDataBaseHelper extends SQLiteOpenHelper {
                 item = new ItemWrapper();
 
                 item.setId(Integer.parseInt(cursor.getString(0)));
-                item.setTitle(cursor.getString(1));
-                item.setInfo(cursor.getString(2));
+                item.setTitle(cursor.getString(2));
+                item.setInfo(cursor.getString(3));
 
                 listItemWrapper.add(item);
 
